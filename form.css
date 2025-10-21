@@ -1,0 +1,56 @@
+body {
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #178d3e; 
+    color: #b4c96a;
+
+    /* 로그인 폼을 화면 한가운데로 보내는 마법! */
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    min-height: 100vh; /* 화면 높이를 꽉 채워서 가운데 정렬하기 */
+    margin: 0;
+}
+
+h1 {
+  display: block;
+  margin-bottom: 20px; /* 제목과 입력칸 사이 여백 */
+}
+
+form {
+  display: block;
+}
+
+form {
+  display: flex;
+  flex-direction: column; /* 위아래 정렬 */
+  gap: 10px; /* 줄 간격 */
+}
+
+/* 각각 한 줄(라벨+입력칸) */
+.form-row {
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬 */
+}
+
+label {
+  display: inline-block;
+  width: 80px; /* ✅ 라벨 고정 폭 (아이디, 비번 정렬용) */
+  text-align: right; /* 오른쪽 정렬해서 깔끔하게 */
+  margin-right: 10px; /* 라벨과 input 사이 간격 */
+  font-size: 18px;
+}
+
+input {
+  width: 250px; /* ✅ 입력칸 동일 폭 */
+  height: 30px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+button {
+  height: 42px;
+  margin-left: 10px;
+  padding: 0 15px;
+  font-size: 16px;
+}

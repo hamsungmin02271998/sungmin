@@ -1,0 +1,29 @@
+.BYMH {display: block;
+  margin: 0 auto;
+  border: 5px solid #a200ff; 
+  border-radius: 8px;    }
+.MYMH {display: block;
+  margin: 0 auto;
+  border: 5px solid #ff0000; 
+  border-radius: 8px;    }
+.SYMH {display: block;
+  margin: 0 auto;
+  border: 5px solid #11cc66; 
+  border-radius: 8px;    }
+.BMS {text-align: center;}
+h1{
+  text-align: center;
+}
+table{
+  border-collapse: collapse;
+  width: 80%;
+  margin: 20px auto;
+}
+
+table, td {
+  border: 5px solid #fcdada;  
+}
+td{
+  padding: 10px 20px;
+  text-align: center; 
+}

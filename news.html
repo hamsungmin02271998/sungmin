@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>게임소식</title>
+<style>
+  :root{
+    --blue:#4a2fff;  /* 타이틀 파란색 */
+    --green:#2aa84a; /* URL 연두/초록 */
+    --violet:#6f42c1;/* 하단 링크 보라색 */
+    --ink:#111; --muted:#666; --chip:#e6e9f2;
+  }
+  body{margin:0;background:#fff;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;}
+  .wrap{max-width:960px;margin:40px auto;padding:0 20px;}
+  /* 상단 가짜 파비콘/URL 줄 */
+  .head{display:flex;align-items:center;gap:10px;color:#3c3c3c;margin-bottom:4px}
+  .favicon{width:28px;height:28px;border-radius:50%;background:#cfd8dc;display:inline-block}
+  .url{color:var(--green);font-size:14px}
+  /* 메인 카드 */
+  .card{display:flex;gap:16px;align-items:flex-start}
+  .text{flex:1 1 auto;min-width:0}
+  .title{font-size:28px;font-weight:800;margin:4px 0 8px 0;color:var(--blue);text-decoration:none}
+  .ad{display:inline-block;font-size:12px;color:#000;background:var(--chip);border-radius:6px;padding:3px 8px;margin-right:6px}
+  .desc{color:#444;line-height:1.5;margin:0 0 14px 0}
+  .thumb{flex:0 0 96px;height:96px;border-radius:10px;background:linear-gradient(135deg,#ddd,#bbb);}
+  /* 하단 보라 링크(두 줄 정렬 느낌) */
+  .sitelinks{display:grid;grid-template-columns:repeat(2,auto);gap:14px 36px;margin-top:8px}
+  .sitelinks a{color:var(--violet);text-decoration:none;font-weight:700}
+  .sitelinks a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <span class="favicon"></span>
+      <span class="url">http://www.tjoeun.co.kr</span>
+      <span>:</span>
+    </div>
+
+    <div class="card">
+      <div class="text">
+        <a class="title" href="#">더조은컴퓨터아카데미 공식</a>
+        <p class="desc">
+          <span class="ad">광고</span>
+          취업 필수자격증 컵할 취득반! 최대 전액국비지원, 훈련수당, 기출 핵심만 쏙쏙!
+          취업자 매년 2,000명 이상 배출! 비전공자도 쉽게 배우는 커리큘럼
+        </p>
+
+        <div class="sitelinks">
+          <a href="#">국비대상조회</a>
+          <a href="#">교육과정</a>
+          <a href="#">포트폴리오</a>
+          <a href="#">개강일정</a>
+        </div>
+      </div>
+
+      <!-- 우측 썸네일(이미지 없이 색/그라디언트만) -->
+      <div class="thumb" aria-hidden="true"></div>
+    </div>
+  </div>
+</body>
+</html>

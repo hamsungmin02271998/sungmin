@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>FC Online 메뉴</title>
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Noto Sans KR", sans-serif;
+  }
+
+  /* 헤더 */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e9edf2;
+  }
+
+  .brand {
+    font-weight: 800;
+  }
+
+  /* 메뉴 공통 */
+  .menu {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .menu a {
+    text-decoration: none;
+    color: #111;
+    font-weight: 600;
+    padding: 8px 0;
+  }
+
+  .menu a:hover {
+    color: #0cc66a;
+  }
+
+  /* 드롭다운 */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    min-width: 140px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
+    z-index: 10;
+  }
+
+  .dropdown-content a {
+    display: block;
+    padding: 10px 14px;
+    color: #111;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* hover 시 표시 */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .dropdown:hover > a {
+    color: #0cc66a;
+  }
+
+  /* 우측 버튼들 */
+  .actions {
+    margin-left: auto;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn-outline {
+    padding: 8px 12px;
+    border: 2px solid #c8cfdb;
+    background: #fff;
+  }
+
+  .cta-start {
+    padding: 10px 18px;
+    background: #11cc66;
+    font-weight: 800;
+  }
+</style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="brand">EA FC ONLINE</div>
+
+    <nav class="menu">
+      <a href="#">프로필</a>
+      <a href="news.html">게임소식</a>
+
+      <!-- 커뮤니티 드롭다운 -->
+      <div class="dropdown">
+        <a href="#">커뮤니티</a>
+        <div class="dropdown-content">
+          <a href="#">마구마구</a>
+          <a href="#">풋볼매니저</a>
+        </div>
+      </div>
+
+      <a href="#">웹 상점</a>
+      <a href="#">데이터센터</a>
+      <a href="#">자료실</a>
+      <a href="#">SPORTS</a>
+    </nav>
+
+    <div class="actions">
+      <button class="btn-outline">고객센터</button>
+      <div class="cta-start">게임시작</div>
+    </div>
+  </header>
+</body>
+</html>
