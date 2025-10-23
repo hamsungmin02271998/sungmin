@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>함성민 PORTFOLIO</title>
+<style>
+  :root{ --ink:#111; --muted:#8a8a8a; --accent:#ff8a00; --line:#e7e9ef; --blue:#4772c2; }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:var(--ink);background:#f1f2f4;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:sticky;top:0;z-index:30;
+    background:linear-gradient(90deg,#b00000 0%, #5a0000 45%, #000 100%);
+    color:#fff;height:64px;display:flex;align-items:center;justify-content:center;
+  }
+  .title{font-size:36px;font-weight:900;letter-spacing:.08em;margin:0}
+
+  /* ===== 홈 버튼 (우측 상단) ===== */
+  .home-btn{
+    position:absolute;right:20px;top:14px;
+    background:none;border:none;cursor:pointer;
+    color:white;font-size:26px;transition:transform .2s;
+  }
+  .home-btn:hover{transform:scale(1.2);}
+
+  /* ===== Hamburger (CSS only toggle) ===== */
+  #nav-toggle{display:none}
+  .hamburger{
+    position:fixed;left:16px;top:16px;z-index:40;width:32px;height:32px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .hamburger span,
+  .hamburger span::before,
+  .hamburger span::after{
+    display:block;width:28px;height:3px;background:#fff;border-radius:2px;position:relative;transition:.2s;
+  }
+  .hamburger span::before,
+  .hamburger span::after{content:"";position:absolute;left:0}
+  .hamburger span::before{top:-8px}
+  .hamburger span::after{top:8px}
+
+  /* Drawer (검붉은 계열) */
+  .drawer{
+    position:fixed;inset:0 auto 0 0;width:280px;max-width:88vw;height:100vh;
+    background:linear-gradient(180deg,#5a0000 0%, #320000 100%);
+    color:#fff;transform:translateX(-100%);transition:transform .25s ease;z-index:35;
+    box-shadow:2px 0 18px rgba(0,0,0,.25);
+    display:flex;flex-direction:column;gap:8px;padding:18px;
+  }
+  .drawer h3{margin:6px 0 8px 4px;font-weight:900;letter-spacing:.06em}
+  .drawer a{
+    color:#fff;text-decoration:none;font-weight:700;display:block;padding:9px 12px;border-radius:8px;transition:background .15s;
+  }
+  .drawer a:hover{background:rgba(255,255,255,.14)}
+  .group{margin-top:6px}
+  .gtitle{opacity:.9;margin:10px 4px 4px;font-size:14px;font-weight:800}
+  .sub a{padding-left:20px;font-weight:600;font-size:15px}
+
+  /* Overlay */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.2s;z-index:32;}
+  #nav-toggle:checked ~ .drawer{transform:translateX(0)}
+  #nav-toggle:checked ~ .overlay{opacity:1;pointer-events:auto}
+  #nav-toggle:checked + label.hamburger span{background:transparent}
+  #nav-toggle:checked + label.hamburger span::before{top:0;transform:rotate(45deg)}
+  #nav-toggle:checked + label.hamburger span::after{top:0;transform:rotate(-45deg)}
+
+  /* ===== Common blocks ===== */
+  .h2{max-width:1400px;margin:26px auto 6px;padding:0 6px;font-size:22px;font-weight:900}
+  .subtitle{margin:12px auto 8px; max-width:1400px; padding:0 6px; font-size:18px;font-weight:800;color:#444;opacity:.9}
+  .sheet{max-width:1400px;margin:10px auto 24px;background:#fff;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.06);padding:18px 20px 8px}
+
+  /* ===== Info list sections (텍스트 위주) ===== */
+  .info-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .info-card{border:3px solid #e1e5ef;border-radius:10px;padding:24px 14px}
+  .info-card h4{margin:0 0 6px;font-size:16px}
+  .info-card p{margin:0;color:#555;font-size:14px}
+
+  /* ===== Tabs (table) ===== */
+  .tabs{margin:10px 0 20px;}
+  .tabs-table{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff;border:1px solid #cfd4de}
+  .tabs-table th,.tabs-table td{
+    border:1px solid #cfd4de;padding:10px 6px;text-align:center;font-weight:700;color:#333;background:#f8fafc;cursor:pointer;user-select:none
+  }
+  .tabs-table th{background:#111;color:#fff}
+  .tabs-table .active{background:#111;color:#fff}
+
+  /* ===== Grid ===== */
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:28px 28px;justify-items:center;align-items:start;min-height:520px;padding:6px 0}
+  .card{width:240px;border-radius:10px;background:#f7f8fc;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.12);transition:transform .15s,box-shadow .15s;cursor:pointer}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.18)}
+  .media{width:100%;height:135px;display:flex;align-items:center;justify-content:center;background:#e9eef9}
+  .media img{width:100%;height:100%;object-fit:cover;transition:transform .25s}
+  .card:hover .media img{transform:scale(1.05)}
+  .placeholder{background:#afafaf;color:#fff;font-weight:700;letter-spacing:.04em}
+  .titlebox{text-align:center;font-weight:700;padding:10px;background:#fff;border-top:1px solid #ddd;min-height:44px;display:flex;align-items:center;justify-content:center}
+
+  /* ===== Pager ===== */
+  .pager{display:flex;gap:18px;justify-content:center;align-items:center;padding:22px 0 30px;border-top:1px solid var(--line);margin-top:8px}
+  .pager button{background:none;border:none;font:inherit;cursor:pointer;color:var(--ink);padding:6px 6px;min-width:28px}
+  .pager .active{color:var(--accent);font-weight:800}
+  .pager .nav[disabled]{opacity:.35;cursor:not-allowed}
+
+  @media (max-width:1200px){.grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:780px){.grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.grid{grid-template-columns:1fr;}.card{width:100%;max-width:420px;}}
+</style>
+</head>
+<body>
+  <!-- 햄버거 토글 & 드로어 -->
+  <input type="checkbox" id="nav-toggle" />
+  <label for="nav-toggle" class="hamburger" aria-label="메뉴 열기"><span></span></label>
+
+  <aside class="drawer">
+    <h3>Ham Sungmin</h3>
+
+    <!-- 1. 축구산업 -->
+    <div class="group">
+      <div class="gtitle">축구산업</div>
+      <div class="sub">
+        <a class="menu-link" href="#industry-infront">IN FRONT</a>
+        <a class="menu-link" href="#industry-spoiler">스포일러</a>
+        <a class="menu-link" href="#industry-rookies">루키즈</a>
+        <a class="menu-link" href="#industry-kjr">K리그 주니어리그</a>
+      </div>
+    </div>
+
+    <!-- 2. 스포츠 이벤트 -->
+    <div class="group">
+      <div class="gtitle">스포츠 이벤트</div>
+      <div class="sub">
+        <a class="menu-link" href="#events-kickoff">제2회 킥오프컵</a>
+        <a class="menu-link" href="#events-hscom">HSCOM 서울이랜드</a>
+      </div>
+    </div>
+
+    <!-- 3. 교육 이수 -->
+    <div class="group">
+      <div class="gtitle">교육 이수</div>
+      <div class="sub">
+        <a class="menu-link" href="#edu-academy">축구산업아카데미</a>
+        <a class="menu-link" href="#edu-kfaD">KFA D급 지도자 자격증</a>
+        <a class="menu-link" href="#edu-nexon">넥슨 초청 베니테즈 감독 보수교육</a>
+      </div>
+    </div>
+
+    <!-- 4. 실무 경력 -->
+    <div class="group">
+      <div class="gtitle">실무 경력</div>
+      <div class="sub">
+        <a class="menu-link" href="#career-sungmoon">성문미디어</a>
+        <a class="menu-link" href="#career-kpfa">한국프로축구선수협회</a>
+      </div>
+    </div>
+
+    <!-- 5. 포스터 -->
+    <div class="group">
+      <div class="gtitle">포스터</div>
+      <div class="sub">
+        <a class="menu-link" href="#poster-infront">IN FRONT</a>
+        <a class="menu-link" href="#poster-etc">기타</a>
+      </div>
+    </div>
+
+    <!-- 6. 영상 제작 (상위섹션: 기존 4개 묶음) -->
+    <div class="group">
+      <div class="gtitle">영상 제작</div>
+      <div class="sub">
+        <a class="menu-link" href="#prod">섹션 시작</a>
+        <a class="menu-link" href="#infront">IN FRONT</a>
+        <a class="menu-link" href="#rookies">루키즈</a>
+        <a class="menu-link" href="#sungmoon">성문미디어</a>
+        <a class="menu-link" href="#kpfa">한국프로축구선수협회</a>
+      </div>
+    </div>
+  </aside>
+  <label for="nav-toggle" class="overlay" aria-hidden="true"></label>
+
+  <!-- 상단바 + 홈버튼 -->
+  <header class="topbar">
+    <h1 class="title">함성민 PORTFOLIO</h1>
+    <button class="home-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="홈으로 이동">🏠</button>
+  </header>
+
+  <!-- ===================== 상단 섹션들(텍스트 위주) ===================== -->
+  <div id="industry" class="h2">축구산업</div>
+  <section class="sheet" id="industry-infront">
+    <div class="subtitle">IN FRONT</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="industry-spoiler">
+    <div class="subtitle">스포일러</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="industry-rookies">
+    <div class="subtitle">루키즈</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="industry-kjr">
+    <div class="subtitle">K리그 주니어리그</div>
+    <div class="info-list wide ">
+
+    </div>
+  </section>
+
+  <div id="events" class="h2">스포츠 이벤트</div>
+  <section class="sheet" id="events-kickoff">
+    <div class="subtitle">제2회 킥오프컵</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="events-hscom">
+    <div class="subtitle">HSCOM 서울이랜드</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+
+  <div id="edu" class="h2">교육 이수</div>
+  <section class="sheet" id="edu-academy">
+    <div class="subtitle">축구산업아카데미</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="edu-kfaD">
+    <div class="subtitle">KFA D급 지도자 자격증</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="edu-nexon">
+    <div class="subtitle">넥슨 초청 베니테즈 감독 보수교육</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+
+  <div id="career" class="h2">실무 경력</div>
+  <section class="sheet" id="career-sungmoon">
+    <div class="subtitle">성문미디어</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="career-kpfa">
+    <div class="subtitle">한국프로축구선수협회</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+
+  <div id="poster" class="h2">포스터</div>
+  <section class="sheet" id="poster-infront">
+    <div class="subtitle">IN FRONT</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+  <section class="sheet" id="poster-etc">
+    <div class="subtitle">기타</div>
+    <div class="info-list wide">
+
+    </div>
+  </section>
+
+  <!-- ===================== 영상 제작 (상위섹션) ===================== -->
+  <div id="prod" class="h2">영상 제작</div>
+
+  <!-- ========= Video Section : IN FRONT ========= -->
+  <div id="infront" class="subtitle"></div>
+  <section class="sheet video-section" data-section="infront">
+    <div class="tabs" role="tablist" aria-label="IN FRONT 카테고리">
+      <table class="tabs-table">
+        <thead>
+          <tr>
+            <th colspan="4" class="tab active" data-cat="전체">IN FRONT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tab" data-cat="예능">예능</td>
+            <td class="tab" data-cat="다큐멘터리">다큐멘터리</td>
+            <td class="tab" data-cat="하이라이트">하이라이트</td>
+            <td class="tab" data-cat="기타">기타</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <section class="grid"></section>
+    <nav class="pager" aria-label="페이지">
+      <button class="nav prev">◀</button>
+      <span class="pageNums"></span>
+      <button class="nav next">▶</button>
+    </nav>
+  </section>
+
+  <!-- ========= Video Section : 루키즈 ========= -->
+  <div id="rookies" class="subtitle"></div>
+  <section class="sheet video-section" data-section="rookies">
+    <div class="tabs" role="tablist" aria-label="루키즈 카테고리">
+      <table class="tabs-table">
+        <thead>
+          <tr>
+            <th colspan="3" class="tab active" data-cat="전체">루키즈</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tab" data-cat="축구조대1995">축구조대1995</td>
+            <td class="tab" data-cat="매치로그">매치로그</td>
+            <td class="tab" data-cat="기타">기타</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <section class="grid"></section>
+    <nav class="pager" aria-label="페이지">
+      <button class="nav prev">◀</button>
+      <span class="pageNums"></span>
+      <button class="nav next">▶</button>
+    </nav>
+  </section>
+
+  <!-- ========= Video Section : 성문미디어 ========= -->
+  <div id="sungmoon" class="subtitle"></div>
+  <section class="sheet video-section" data-section="sungmoon">
+    <div class="tabs" role="tablist" aria-label="성문미디어 카테고리">
+      <table class="tabs-table">
+        <thead>
+          <tr>
+            <th colspan="3" class="tab active" data-cat="전체">성문미디어</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tab" data-cat="K3,K4리그">K3,K4리그</td>
+            <td class="tab" data-cat="인천유나이티드">인천유나이티드</td>
+            <td class="tab" data-cat="동네축구고수">동네축구고수</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <section class="grid"></section>
+    <nav class="pager" aria-label="페이지">
+      <button class="nav prev">◀</button>
+      <span class="pageNums"></span>
+      <button class="nav next">▶</button>
+    </nav>
+  </section>
+
+  <!-- ========= Video Section : 한국프로축구선수협회 ========= -->
+  <div id="kpfa" class="subtitle"></div>
+  <section class="sheet video-section" data-section="kpfa">
+    <div class="tabs" role="tablist" aria-label="선수협 카테고리">
+      <table class="tabs-table">
+        <thead>
+          <tr>
+            <th colspan="3" class="tab active" data-cat="전체">한국프로축구선수협회</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tab" data-cat="자선경기">자선경기</td>
+            <td class="tab" data-cat="WK리그 시상식">WK리그 시상식</td>
+            <td class="tab" data-cat="기타">기타</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <section class="grid"></section>
+    <nav class="pager" aria-label="페이지">
+      <button class="nav prev">◀</button>
+      <span class="pageNums"></span>
+      <button class="nav next">▶</button>
+    </nav>
+  </section>
+
+<script>
+  /* 햄버거에서 링크 클릭하면 메뉴 닫기 */
+  document.querySelectorAll('.menu-link').forEach(a=>{
+    a.addEventListener('click', ()=>{ document.getElementById('nav-toggle').checked = false; });
+  });
+
+  /* ====== 데이터 (섹션별/하위섹션별) ====== */
+  const PAGE_SIZE = 10;
+
+  const DATA = {
+    // IN FRONT: 예능 / 다큐멘터리 / 하이라이트 / 기타
+    infront: [
+              {title:'[INU 아웃풋볼러 인터뷰] Ep.1-1 파란만장했던 찬기의 송도살이!(Feat.올림픽)', youtubeId:'n6u36VOAens', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.1-2 24살 찬기의 슬기로운 프로생활!(Feat.수원삼성)🔵⚪️🔴', youtubeId:'RG5ekKjAa-s', category:'예능'},
+      {title:'2021 U리그 3권역 4R [인천대학교vs사이버한국외국어대학교] H/L', youtubeId:'7_2U2fLVFZ4', category:'하이라이트'},
+      {title:'2021 U리그 3권역 10R [인천대학교vs한양대학교] H/L', youtubeId:'zPOTslLqTpc', category:'하이라이트'},
+      {title:'2021 U리그 3권역 4R [인천대학교vs사이버한국외국어대학교] H/L', youtubeId:'O8uNUxyY1w0', category:'하이라이트'},
+      {title:'제16회 1,2학년 대학축구연맹전 11조 3R [인천대학교vsKC대학교] 하이라이트', youtubeId:'pDjrE7ZlcbU', category:'하이라이트'},
+      {title:'제57회 전국추계대학축구연맹전 4조 2R [인천대학교vs김해대학교] 하이라이트L', youtubeId:'tTecUtF0Qds', category:'하이라이트'},
+      {title:'제57회 전국추계대학축구연맹전 16강 [인천대학교vs단국대학교] 하이라이트', youtubeId:'TSM97oQ74Tg', category:'하이라이트'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.2-1 핵인싸 정호의 화려했던 대학생활! (Feat.14학번)🤫', youtubeId:'q4Hz0TTaudk', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.2-2 다재다능 정호의 슬기로운 프로생활! (Feat.전종혁)🎤', youtubeId:'57sC0Q6xeHY', category:'예능'},  
+      {title:'2021 U리그 3권역 14R [인천대학교vs고려대학교] H/L', youtubeId:'3Rv5lWFE6Sc', category:'하이라이트'},
+      {title:'2021 U리그 3권역 12R [인천대학교vs수원대학교] H/L', youtubeId:'O-qsUZpBdX4', category:'하이라이트'},
+      {title:'2021 U리그 왕중왕전 32강 [인천대학교vs동원과학기술대학교] 하이라이트', youtubeId:'USpsqt-yKog', category:'하이라이트'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.3-1 인천의 아들 우윳빛깔 표건희🥛👦🏻', youtubeId:'YFW8fe04fso', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.3-2 인천 생활 9년차의 노력만점 프로생활🔵⚫️✨', youtubeId:'fxc1Ew7PKfE', category:'예능'},      
+      {title:'[INU 릴레이 인터뷰] Ep.16 인천대 아이돌 하이준 선수(feat.브레인👨🏻‍💻)', youtubeId:'ZWNVByqK9zY', category:'예능'},      
+      {title:'[INU 릴레이 인터뷰] Ep.17 인천대 붕기 권기범 선수(feat.푸린🎈)', youtubeId:'1mk4qUVpqHo', category:'예능'},      
+      {title:'제 58회 전국춘계대학축구연맹전 15조 1R [ 인천대학교 vs 단국대학교 ] 하이라이트', youtubeId:'BPixa0ZZudI', category:'하이라이트'},
+      {title:'⚽ U리그 개막 D-4 ,1학년 대영의 각오⚽', youtubeId:'TYvVGt26BPE', category:'기타'},
+      {title:'⚽ U리그 개막 D-4 ,2학년 준석의 각오⚽', youtubeId:'ENLoXNvHAuU', category:'기타'},
+      {title:'⚽ U리그 개막 D-4 ,3학년 성호의 각오⚽', youtubeId:'nHj_ZYFs810', category:'기타'},
+      {title:'⚽ U리그 개막 D-4 ,4학년 민우의 각오⚽', youtubeId:'5w89y3Y39O0', category:'기타'},
+      {title:'2022 인천대 캡틴 고민우 선수 하이라이트', youtubeId:'v029J4LFD5Y', category:'하이라이트'},
+      {title:'2022 U-LEAGUE 1 2권역 4R [ 인천대학교 VS 사이버한국외국어대학교 ] 하이라이트', youtubeId:'4-CkKRk2uN8', category:'하이라이트'},
+      {title:'2022 U-LEAGUE 1 2권역 5R [ 인천대학교 VS 경희대학교 ] 하이라이트', youtubeId:'M_zejmHZxb8', category:'하이라이트'},
+      {title:'[ INU GAMES - 너의 능력치는] Ep.01 논란의 능력치, 엇갈리는 희비', youtubeId:'oiAZ83AuesU', category:'예능'},
+      {title:'[ 훈련스케치 with 블랙야크 강태선 나눔재단 ]', youtubeId:'Hy5RYZBBvVc', category:'예능'},
+      {title:'[ 유티의 인터뷰 with 인천대 축구부 ]', youtubeId:'wDXCscuNCeU', category:'예능'},
+      {title:'[퇴근길 윈터뷰 with 유티] Ep.01 강서대전, 승리의 윈터뷰', youtubeId:'oTqJO42bRmE', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.4-1 돌아온 빽캡, 성진의 알쏭달쏭 송도살이!', youtubeId:'JMlJ2oONFQw', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.4-2 사회 초년생 성진의 좌충우돌 프로생활!', youtubeId:'m10p-VSKGg4', category:'예능'},
+      {title:'[ 훈남in터뷰 ] Ep. 01 인천대 훈남들을 만나봤습니다', youtubeId:'EEGDKmDFLqw', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.5-1 좀 오래된 기억 속 동민의 대학생활', youtubeId:'vPpDfeN7_P0', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.5-2 K리그 씹어먹는 중인 동민의 숭의 라이프', youtubeId:'mNMx6lLOgkc', category:'예능'},
+      {title:'[ 훈남인터뷰 ] Ep. 02 훈남들의 무더위 극복 방법은?', youtubeId:'2BnB9G4tuAM', category:'예능'},
+      {title:'[ 훈남in터뷰 Ep. 03 개미와 베짱이(?) ]', youtubeId:'YflYNcg0k7Q', category:'예능'},
+      {title:'[ INU GAMES - 너의 능력치는] Ep.02 오늘만 사는 황&황 감독 데뷔전', youtubeId:'h_WQQkdQXz0', category:'예능'},
+      {title:'[ 훈남in터뷰 Ep. 04 하루에 두 번 ]', youtubeId:'jhGdL97xLlY', category:'예능'},
+      {title:'2022 제58회 추계대학축구연맹전 조별예선 5조 2R [인천대학교vs한일장신대학교] H/L', youtubeId:'m3UXYeeH6Hw', category:'하이라이트'},
+      {title:'[ 혜윰 POM, 8월의 선수 후보 | 김영환, 장희웅, 전문수 ]', youtubeId:'N01iIKpcPIA', category:'하이라이트'},
+      {title:'[퇴근길 윈터뷰] Ep.02 사이버외대전, 승리의 윈터뷰', youtubeId:'vzsaq8thL20', category:'예능'},
+      {title:'[ 훈남in터뷰 Ep. 05 2학기, 달라진 훈남들 ]', youtubeId:'Jwra6VHHNIE', category:'예능'},
+      {title:'[퇴근길 윈터뷰] Ep.03 광운대전, 승리의 윈터뷰', youtubeId:'C2naCD0liDw', category:'예능'},
+      {title:'2022 U리그 1 2권역 12R [인천대학교vs광운대학교] H/L', youtubeId:'MlJoeIn4lpY', category:'하이라이트'},
+      {title:'[ 혜윰 POM, 8월의 선수 장희웅 ]', youtubeId:'vzKIlYXqcAo', category:'기타'},
+      {title:'[ IN FRONT 스폰서 홍보 영상 ] Ep. 01 경희대전은 직관, 클래퍼는 디자인이고', youtubeId:'itQJpr1GrdI', category:'기타'},
+      {title:'[ 방. 털. 고 ] Ep. 01 방 좀 한 번 털어봤습니다', youtubeId:'W3VXM8iwJpM', category:'예능'},
+      {title:'[ IN FRONT 스폰서 홍보 영상 ] Ep. 02 예능을 가장한 폭로전? with 도너츠윤 송도점', youtubeId:'835w3le--hg', category:'예능'},
+      {title:'[ IN FRONT 스폰서 홍보 영상 ] Ep. 03 자연스러운 토크, 그런데 이제 곱창을 곁들인', youtubeId:'F1F6_IHRVAQ', category:'예능'},
+      {title:'[ IN FRONT 스폰서 홍보 영상 ] Ep. 04 샐러드 걸고 양세찬 게임', youtubeId:'wPY4TcdiZeE', category:'예능'},
+      {title:'[ Thanks For All, Thanks A Lot ]', youtubeId:'MSOnIZYRTH0', category:'기타'},
+      {title:'[ 혜윰 POM, 10, 11월의 선수 황대영 ]', youtubeId:'a4nuPNHqKYk', category:'기타'},
+      {title:'[ IN FRONT 스폰서 홍보 영상 ] Ep. 05 술 없이 술 게임', youtubeId:'w2bbBBDKnzQ', category:'예능'},
+      {title:'[ IN FRONT 스폰서 홍보 영상 ] Ep. 06 철인7호치킨 걸고 치킨게임(?)', youtubeId:'e1rI9m6afGw', category:'예능'},
+      {title:'[ 훈남in터뷰 Ep. 08 휴가 중 일대일 승부 ]', youtubeId:'A79rTH8LuMg', category:'예능'},
+      {title:'[ 꼬리에 꼬리를 무는 IN FRONT - 5기 모집 홍보영상 ]', youtubeId:'BDGHOt1DcWg', category:'기타'},
+      {title:'[ 훈남in터뷰 Ep. 09 Goodbye 2022 ]', youtubeId:'5EA6m-DtlzY', category:'예능'},
+      {title:'약속의 땅 통영 제19회 1, 2학년 대학축구대회 통영기 조별예선 2R [인천대학교vs용인대학교] H/L', youtubeId:'MmIkFpOVWFA', category:'하이라이트'},
+      {title:'약속의 땅 통영 제19회 1, 2학년 대학축구대회 통영기 조별예선 3R [인천대학교vs위덕대학교] H/L', youtubeId:'ABdBxjRTaB0', category:'하이라이트'},
+      {title:'[ 혜윰 MOM 인터뷰🎤 ] 약속의 땅 통영 제19회 1, 2학년 대학축구대회 결승 동아대전 MOM 황대영 선수 인터뷰', youtubeId:'itz02LML5uQ', category:'기타'},
+      {title:'[ 혜윰 POM, 1월의 선수 후보 | 강대규, 김영환, 황대영 ]', youtubeId:'d5GdQi2cshs', category:'하이라이트'},
+      {title:'[ 훈남in터뷰 Ep. 11 눈 내리는 제주 ]', youtubeId:'jGAs3IjOjXo', category:'예능'},
+      {title:'2023 인천대학교 축구부 No. 18 황대영 선수 하이라이트', youtubeId:'LmekPNS0Q8s', category:'하이라이트'},
+      {title:'[ 비디오머규 ]', youtubeId:'tcpl87Ta2z0', category:'예능'},
+      {title:'[ 혜윰 POM 2023년 1월의 선수 황대영 ]', youtubeId:'SpNpA1NrU6g', category:'기타'},
+      {title:'약속의 땅 통영 제59회 춘계 대학축구연맹전 통영기 조별예선 1R [인천대학교vs김천대학교] H/L', youtubeId:'yW7b7UirUFw', category:'하이라이트'},
+      {title:'[ 혜윰 MOM 인터뷰🎤 ] 약속의 땅 통영 제59회 춘계 대학축구연맹전 통영기 김천대전 MOM 강민성 선수 인터뷰', youtubeId:'w5DTTpJc45s', category:'기타'},
+      {title:'2023 인천대학교 축구부 No. 3 윤여준 선수 하이라이트', youtubeId:'wj9H4PErpZk', category:'하이라이트'},
+      {title:'[ 바스쿠 & 혜윰 POM, 2월의 선수 후보 | 강민성, 김태양, 박상범 ]', youtubeId:'kcY1fICtMFA', category:'하이라이트'},
+      {title:'2023 인천대학교 축구부 No. 23 강민성 선수 하이라이트', youtubeId:'S_nAzevSb6E', category:'하이라이트'},
+      {title:'2023 인천대학교 축구부 No. 4 이준석 선수 하이라이트', youtubeId:'HPVdoG3xdcs', category:'하이라이트'},
+      {title:'[ 바스쿠&혜윰 POM 2023년 2월의 선수 강민성 ]', youtubeId:'MdNmeZCVTC4', category:'기타'},
+      {title:'2023 U리그1 3권역 1R [인천대학교vs강서대학교] H/L', youtubeId:'YfpOgEzwKkc', category:'하이라이트'},
+      {title:'[ 퇴근길 윈터뷰 ] Ep.05 강서대전, 승리의 윈터뷰', youtubeId:'cOFQ2S8Krqs', category:'예능'},
+      {title:'[THE POWER OF KOREA] 한일 1, 2학년 대학축구 챔피언십 D-1, 선수단 각오', youtubeId:'sEV5bb_R-Lw', category:'기타'},
+      {title:'2023 인천대학교 축구부 No. 1 김태양 선수 하이라이트', youtubeId:'k71dYhzgXrA', category:'하이라이트'},
+      {title:'2023 인천대학교 축구부 No. 20 박상범 선수 하이라이트', youtubeId:'vS6rSGcw7i4', category:'하이라이트'},
+      {title:'2023 인천대학교 축구부 No. 6 임지민 선수 하이라이트', youtubeId:'eYLIckSvESQ', category:'하이라이트'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 3R 광운대전 MOM 장희웅 선수 인터뷰', youtubeId:'GEKSUk-Cyho', category:'기타'},
+      {title:'[ 퇴근길 윈터뷰 ] Ep.06 광운대전, 승리의 윈터뷰', youtubeId:'Nl2CjvVphTU', category:'예능'},
+      {title:'[ 바스쿠 & 혜윰 POM, 3월의 선수 후보 | 강민성, 김민찬, 임지민 ]', youtubeId:'ZO1mpmzqOGY', category:'하이라이트'},
+      {title:'2023 인천대학교 축구부 No. 13 김영환 선수 하이라이트', youtubeId:'9mpd6iKuqaA', category:'하이라이트'},
+      {title:'2023 U리그1 3권역 5R [인천대학교vs광주대학교] H/L', youtubeId:'4k617gz2aOU', category:'하이라이트'},
+      {title:'2023 인천대학교 축구부 No. 8 전문수 선수 하이라이트', youtubeId:'UE_cGRS7qM0', category:'하이라이트'},
+      {title:'[ 바스쿠&혜윰 POM 2023년 3월의 선수 강민성 ]', youtubeId:'EsWWQqTdTUI', category:'기타'},
+      {title:'[ 훈남in터뷰 Ep. 12 어느 봄날의 기억 ]', youtubeId:'xWPgsBhMb3I', category:'예능'},
+      {title:'[ 바스쿠 & 혜윰 POM, 4월의 선수 후보 | 박상범, 이준석, 황지상 ]', youtubeId:'IjUTYNHWmGE', category:'하이라이트'},
+      {title:'2023시즌 인천대학교 축구부 선수 소개 영상', youtubeId:'GkQ7-leU6N0', category:'기타'},
+      {title:'[ 바스쿠&혜윰 POM 2023년 4월의 선수 이준석 ]', youtubeId:'CREcMDTukwo', category:'기타'},
+      {title:'[ 퇴근길 윈터뷰 ] Ep.07 명지대전, 승리의 윈터뷰', youtubeId:'ljsdU5mLzRo', category:'예능'},
+      {title:'[ 훈남in터뷰 Ep. 13 소소한 훈련로그 ]', youtubeId:'_wphpRW7Hy8', category:'예능'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 7R 명지대전 MOM 전문수 선수 인터뷰', youtubeId:'2js0TKg3nq4', category:'기타'},
+      {title:'[ 퇴근길 윈터뷰 ] Ep.08 한일장신대전, 승리의 윈터뷰', youtubeId:'LicmhDlV_d0', category:'예능'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 8R 한일장신대전 MOM 조성호 선수 인터뷰', youtubeId:'1ar104LY_Ko', category:'기타'},
+      {title:'2023 인천대학교 축구부 No. 24 황지상 선수 하이라이트', youtubeId:'7yDBr_ThvxQ', category:'하이라이트'},
+      {title:'[ 바스쿠 & 혜윰 POM, 5월의 선수 후보 | 김민찬, 전문수, 황대영 ]', youtubeId:'9g0ntw_XiCc', category:'하이라이트'},
+      {title:'[ 바스쿠&혜윰 POM 2023년 5월의 선수 황대영 ]', youtubeId:'peT7TAcTptA', category:'기타'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 11R 용인대전 MOM 강민성 선수 인터뷰', youtubeId:'-jAstYL9SSQ', category:'기타'},
+      {title:'[ 퇴근길 윈터뷰 ] Ep.09 용인대전, 승리의 윈터뷰', youtubeId:'dOQ-40KnNAc', category:'예능'},
+      {title:'[ 인천대학교 축구부 전반기 ALL GOALS ]', youtubeId:'SoeA5B1KDJg', category:'하이라이트'},
+      {title:'[ 바스쿠 & 혜윰 POM, 6월의 선수 후보 | 장희웅, 강대규, 조성호 ]', youtubeId:'D8BRBLus2i4', category:'하이라이트'},
+      {title:'[ 훈남in터뷰 Ep. 14 그리고 우리는... 여름이었다 ]', youtubeId:'7KbubMj1yKA', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.6-1 바라만 봐도 행복한 잘생긴 정빈선배', youtubeId:'Z485aQ3zniw', category:'예능'},
+      {title:'[INU 아웃풋볼러 인터뷰] Ep.6-2 프로페셔널 그 자체 부천 에이스 정빈', youtubeId:'BO9t6kYtb-k', category:'예능'},
+      {title:'[ 바스쿠&혜윰 POM 2023년 6월의 선수 장희웅 ]', youtubeId:'mGsXIZD1geE', category:'하이라이트'},
+      {title:'[ 훈남in터뷰 Ep. 15 전지훈련하는 남자 인터뷰 ]', youtubeId:'wcOA72PlVbU', category:'예능'},
+      {title:'[ 비디오머규 Ep.2 정규 코너 되는 거 맞죠? ]', youtubeId:'l2jIsuejz-c', category:'예능'},
+      {title:'[나의 전술일지] Ep.1 2023.01.16 vs전주대 with 대규, 정환', youtubeId:'_EI2N6-LuLE', category:'기타'},
+      {title:'[ 왕관을 쓰려는 자, 그 무게를 견뎌라 ] 2023 인천대 축구부 추계 연맹전 출정 영상 D-14', youtubeId:'Fg5y-KFCJs0', category:'기타'},
+      {title:'[ 훈남in터뷰 Ep. 16 피할 수 없으면 즐겨라 ]', youtubeId:'wZuLA1wb6fI', category:'예능'},
+      {title:'[ 왕관을 쓰려는 자, 그 무게를 견뎌라 ] 2023 인천대 축구부 추계 연맹전 출정 영상 D-7', youtubeId:'D-2ktT_aZqQ', category:'기타'},
+      {title:'[ 훈남in터뷰 Ep. 17 월요병을 극복하는 방법 ]', youtubeId:'Gq1j62OrXoQ', category:'예능'},
+      {title:'[ 훈남in터뷰 Ep. 18 추계 대회를 준비하며… ]', youtubeId:'EuD-R_ccmMk', category:'예능'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 고원관광 휴양 레저스포츠 도시 태백 제59회 추계 대학축구연맹전 조별예선 2R 군장대전 조성호 선수 인터뷰', youtubeId:'OVB1l6E4pXI', category:'기타'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 고원관광 휴양 레저스포츠 도시 태백 제59회 추계 대학축구연맹전 조별예선 3R 위덕대전 장희웅 선수 인터뷰', youtubeId:'5CSbGDVKmy4', category:'기타'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 고원관광 휴양 레저스포츠 도시 태백 제59회 추계 대학축구연맹전 22강 신성대전 김민찬 선수 인터뷰', youtubeId:'vBO3LN-j1JE', category:'기타'},
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 고원관광 휴양 레저스포츠 도시 태백 제59회 추계 대학축구연맹전 16강 신성대전 김영환 선수 인터뷰', youtubeId:'uRpVYqj7ZL0', category:'기타'},
+      {title:'[ 바스쿠 & 혜윰 POM, 8월의 선수 후보 | 김민찬, 전문수, 장희웅 ]', youtubeId:'jKrQhkD1aLg', category:'하이라이트'},    
+      {title:'[ 2023 INU FOOTBALL TEAM DOCUMENTARY - THE BLUE DAYS ] EP.01 인생사 새옹지마 (人生事 塞翁之馬)', youtubeId:'4tQJz4jb3Zs', category:'다큐멘터리'},    
+      {title:'2023 인천대학교 축구부 No. 7 김민찬 선수 하이라이트', youtubeId:'7r26Y25Ohno', category:'하이라이트'},    
+      {title:'[ 2023 INU FOOTBALL TEAM DOCUMENTARY - THE BLUE DAYS ] EP.02 출항 (出港)', youtubeId:'7JPtVuB9tmo', category:'다큐멘터리'},    
+      {title:'[ 바스쿠&혜윰 POM 2023년 8월의 선수 김민찬 ]', youtubeId:'X1yIak6xXd0', category:'기타'},    
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 13R 조선대전 MOM 조한서 선수 인터뷰', youtubeId:'kDfrYDYvqDE', category:'기타'},    
+      {title:'[ 추계 대회 하드 털이 ] 다큐 소스는 아닌 것 같고... 인천대 축구부 추계 예능 소스 모음 ZIP', youtubeId:'d1FcEf3tBPU', category:'예능'},    
+      {title:'[ 퇴근길 윈터뷰 ] ep.10 조선대전, 승리의 윈터뷰', youtubeId:'n18Gpyw3EYE', category:'예능'},    
+      {title:'2023 인천대학교 축구부 No. 9 장희웅 선수 하이라이트', youtubeId:'H2M3T3lA1MA', category:'하이라이트'},    
+      {title:'2023 인천대학교 축구부 No. 10 이용수 선수 하이라이트', youtubeId:'VopluT5VMgM', category:'하이라이트'},    
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 14R 광주대전 MOM 황지상 선수 인터뷰', youtubeId:'ACsYApLZRS0', category:'기타'},    
+      {title:'[ 퇴근길 윈터뷰 ] ep.11 광주대전, 승리의 윈터뷰', youtubeId:'7Y2H6SL5d44', category:'예능'},    
+      {title:'[ 바스쿠 & 혜윰 POM, 9월의 선수 후보 | 김성진, 장희웅, 황지상 ]', youtubeId:'Euv2_d8_qjU', category:'하이라이트'},    
+      {title:'[INU 릴레이 인터뷰] Ep. 28 인천대 에이스 NO.24 황지상 선수', youtubeId:'_8x4gvclouU', category:'예능'},    
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 16R 명지대전 MOM 김성진 선수 인터뷰', youtubeId:'gILgsnzYm40', category:'기타'},    
+      {title:'[ 퇴근길 윈터뷰 ] ep.12 명지대전, 승리의 윈터뷰', youtubeId:'l3IS2Vc8Dwo', category:'예능'},    
+      {title:'[ 2023 INU FOOTBALL TEAM DOCUMENTARY - THE BLUE DAYS ] EP.03 파란만장 (波瀾萬丈)', youtubeId:'6rSIx-S8YbM', category:'다큐멘터리'},    
+      {title:'[INU 릴레이 인터뷰] Ep. 29 인천대 키링남 NO.18 황대영 선수', youtubeId:'JvjMSCuYvaM', category:'예능'},    
+      {title:'2023 인천대학교 축구부 No. 22 조성호 선수 하이라이트', youtubeId:'_8Ywp4dOAzU', category:'하이라이트'},    
+      {title:'[ 바스쿠&혜윰 POM 2023년 9월의 선수 황지상 ]', youtubeId:'WjzvNbz0vaY', category:'기타'},    
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 2R 순연경기 용인대전 MOM 장희웅 선수 인터뷰', youtubeId:'O1vWhT-1LUE', category:'기타'},    
+      {title:'[ 2023 BIG WAVE 촬영 비하인드 ]', youtubeId:'iHcnLWeAMio', category:'예능'},    
+      {title:'[ 바스쿠&혜윰 MOM 인터뷰🎤 ] 2023 U리그1 17R 한일장신대전 MOM 김민찬 선수 인터뷰', youtubeId:'ndGgOtIt3b0', category:'기타'},    
+      {title:'[ 바스쿠 & 혜윰 POM, 10월의 선수 후보 | 김성진, 김민찬, 전문수 ]', youtubeId:'M_vul8wiRks', category:'하이라이트'},    
+      {title:'[ 바스쿠&혜윰 POM 2023년 10월의 선수 김성진 ]', youtubeId:'MCmNDfVUW6M', category:'기타'},    
+      {title:'[ 훈남in터뷰 Ep. 19 가을은 천고마비의 계절 ]', youtubeId:'3e3WNBvOy0E', category:'예능'},    
+      {title:'2023 인천대학교 축구부 No. 21 강대규 선수 하이라이트', youtubeId:'82HimSfV4iU', category:'하이라이트'},    
+      {title:'[ 인천대학교 축구부 후반기 ALL GOALS ]', youtubeId:'qJMMw28YABU', category:'하이라이트'},    
+      {title:'THANK YOU 김민찬 | 인천대 No.7 김민찬과 함께한 모든 순간을 잊지 않겠습니다', youtubeId:'Azam59FURV4', category:'기타'},    
+      {title:'[ 2023 INU FOOTBALL TEAM DOCUMENTARY - THE BLUE DAYS ] EP.04 회상 (回想)', youtubeId:'-XbM6LQD_tU', category:'다큐멘터리'},    
+      {title:'황지상 미니1집 - Hwang Jisang 1st Mini Album', youtubeId:'FjQQLGa7WIw', category:'기타'},    
+      {title:'THANK YOU 장희웅 | 인천대 No.9 장희웅과 함께한 모든 순간을 잊지 않겠습니다', youtubeId:'92kUPBqhQ_A', category:'기타'},    
+      {title:'THANK YOU 장희웅 | 인천대 No.10 이용수와 함께한 모든 순간을 잊지 않겠습니다', youtubeId:'T2l1exQ683k', category:'기타'},    
+      {title:'인천대 축구부 방을 털어버렸다 (방털이)', youtubeId:'PP0wKM_pU1Q', category:'예능'},    
+      {title:'2023 인천대학교 축구부 No. 2 김성진 선수 하이라이트', youtubeId:'m36YTCO6a34', category:'하이라이트'},    
+      {title:'THANK YOU 이새한 | 인천대 No.11 이새한과 함께한 모든 순간을 잊지 않겠습니다', youtubeId:'QuNZEPfSes4', category:'기타'},    
+      {title:'[ 2023 INU FOOTBALL TEAM DOCUMENTARY - THE BLUE DAYS ] EP.05 백절불요 (百折不撓)', youtubeId:'ccQ6QDDyT-s', category:'다큐멘터리'},    
+      {title:'THANK YOU 박태건 | 인천대 No.17 박태건과 함께한 모든 순간을 잊지 않겠습니다', youtubeId:'zhLWq79IXTU', category:'기타'},    
+      {title:'THANK YOU 박태건 | 인천대 No.22 조성호와 함께한 모든 순간을 잊지 않겠습니다', youtubeId:'3U5eQcvxMis', category:'기타'},    
+      {title:'[ 2023 INU FOOTBALL TEAM DOCUMENTARY - THE BLUE DAYS ] EP.06 종이부시 (終而復始)', youtubeId:'dWENmiyDjNw', category:'다큐멘터리'},    
+    ],
+    // 루키즈: 축구조대1995 / 매치로그 / 기타
+    rookies: [
+      {title:'축구조대1995 EP1', youtubeId:'LZ9F2-3TqjM', category:'축구조대1995'},
+      {title:'축구조대1995 EP2', youtubeId:'kXYiU_JCYtU', category:'축구조대1995'},
+      {title:'매치로그 01', youtubeId:'OPf0YbXqDm0', category:'매치로그'},
+      {title:'매치로그 02', youtubeId:'2Vv-BfVoq4g', category:'매치로그'},
+      {title:'루키즈 기타', youtubeId:'WjqiU5FgsYc', category:'기타'}
+    ],
+    // 성문미디어: K3,K4리그 / 인천유나이티드 / 동네축구고수
+    sungmoon: [
+      {title:'K3,K4 Highlights', youtubeId:'0fYL_qiDYf0', category:'K3,K4리그'},
+      {title:'K4 Match Recap',   youtubeId:'VYY3dWwzaZ8', category:'K3,K4리그'},
+      {title:'인천Utd Clip',     youtubeId:'z4l1rV4YN2Q', category:'인천유나이티드'},
+      {title:'동네축구고수 EP1', youtubeId:'onlPEjODTCE', category:'동네축구고수'}
+    ],
+    // 선수협: 자선경기 / WK리그 시상식 / 기타
+    kpfa: [
+      {title:'자선경기 2024',    youtubeId:'9bZkp7q19f0', category:'자선경기'},
+      {title:'WK리그 시상식 하이라이트', youtubeId:'tAGnKpE4NCI', category:'WK리그 시상식'},
+      {title:'선수협 기타',      youtubeId:'RgKAFK5djSk', category:'기타'}
+    ]
+  };
+
+  /* ====== 섹션 렌더러 공통 (영상 섹션) ====== */
+  document.querySelectorAll('.video-section').forEach(initSection);
+
+  function initSection(sectionEl){
+    const sectionKey = sectionEl.dataset.section;         // 'infront' | 'rookies' | 'sungmoon' | 'kpfa'
+    const itemsAll = DATA[sectionKey] || [];
+    let currentCat = '전체';
+    let currentPage = 1;
+
+    const grid = sectionEl.querySelector('.grid');
+    const tabs = sectionEl.querySelectorAll('.tabs .tab');
+    const prevBtn = sectionEl.querySelector('.pager .prev');
+    const nextBtn = sectionEl.querySelector('.pager .next');
+    const pageNums = sectionEl.querySelector('.pager .pageNums');
+
+    function getFiltered(){
+      return (currentCat==='전체') ? itemsAll : itemsAll.filter(v=>v.category===currentCat);
+    }
+    function getPageCount(len){ return Math.max(1, Math.ceil(len / PAGE_SIZE)); }
+
+    function render(){
+      const list = getFiltered();
+      const totalPages = getPageCount(list.length);
+      if(currentPage > totalPages) currentPage = totalPages;
+
+      grid.innerHTML = '';
+      const start = (currentPage-1) * PAGE_SIZE;
+      const pageItems = list.slice(start, start + PAGE_SIZE);
+
+      for(let i=0;i<PAGE_SIZE;i++){
+        const item = pageItems[i];
+        const card = document.createElement('div');
+        card.className = 'card';
+        const media = document.createElement('div');
+        media.className = 'media';
+
+        if(item){
+          const img = document.createElement('img');
+          img.src = `https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`;
+          img.alt = item.title;
+          media.appendChild(img);
+
+          card.addEventListener('click', ()=>{
+            media.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${item.youtubeId}?autoplay=1"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen style="border:0"></iframe>`;
+          });
+
+          const title = document.createElement('div');
+          title.className = 'titlebox';
+          title.textContent = item.title;
+          card.appendChild(media); card.appendChild(title);
+        }else{
+          media.classList.add('placeholder'); media.textContent='';
+          const title = document.createElement('div');
+          title.className='titlebox'; title.textContent='';
+          card.appendChild(media); card.appendChild(title);
+        }
+
+        grid.appendChild(card);
+      }
+
+      // pager
+      pageNums.innerHTML='';
+      for(let p=1;p<=totalPages;p++){
+        const btn=document.createElement('button');
+        btn.textContent=p;
+        btn.className=(p===currentPage)?'active':'';
+        btn.addEventListener('click',()=>{ currentPage=p; render(); });
+        pageNums.appendChild(btn);
+      }
+      prevBtn.disabled = currentPage===1;
+      nextBtn.disabled = currentPage===totalPages;
+    }
+
+    // tab events
+    tabs.forEach(tab=>{
+      tab.addEventListener('click', ()=>{
+        tabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCat = tab.dataset.cat;     // 각 섹션의 하위 카테고리명
+        currentPage = 1;
+        render();
+      });
+    });
+
+    // pager events
+    prevBtn.addEventListener('click', ()=>{ if(currentPage>1){ currentPage--; render(); }});
+    nextBtn.addEventListener('click', ()=>{
+      const totalPages = getPageCount(getFiltered().length);
+      if(currentPage<totalPages){ currentPage++; render(); }
+    });
+
+    // first render
+    render();
+  }
+</script>
+</body>
+</html>
